@@ -1,2 +1,2 @@
-# node-threading
+# subservient
 Node.js threading made easy!
