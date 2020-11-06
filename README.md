@@ -53,7 +53,7 @@ const farm = createFarm('worker.js', {
 
 worker.js
 ```js
-import { expose } from 'subservient/worker';
+import { expose } from 'subservient';
 
 expose({
     hardTask() {
@@ -106,7 +106,7 @@ const pool = createPool('worker.js', 3);
 
 worker.js (Same as in the first example):
 ```js
-import { expose } from 'subservient/worker';
+import { expose } from 'subservient';
 
 expose({
     hardTask() {

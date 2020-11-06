@@ -1,4 +1,4 @@
-import { expose } from '../../worker';
+import { expose } from '../..';
 
 expose({
     hardTask() {

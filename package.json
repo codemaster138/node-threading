@@ -6,7 +6,7 @@
   "typings": "./@types",
   "scripts": {
     "test": "jest",
-    "build": "rimraf ./out ./worker && tsc && mv ./out/worker ./worker",
+    "build": "rimraf ./out ./worker && tsc && cp -R ./out/worker ./worker",
     "prepublish": "npm run build"
   },
   "repository": {

@@ -25,3 +25,9 @@ export namespace subservient {
 
 export function createFarm(file: string, options?: subservient.FarmOptions): subservient.WorkerFarm;
 export function createPool(file: string, size: number): subservient.WorkerPool;
+
+/**
+ * If in a worker thread, expose the functions in `endpoint` to the master thread
+ * @param endpoint Functions exposed to the master thread
+ */
+export function exopse(endpoint: any): void;
