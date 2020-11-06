@@ -39,21 +39,22 @@ import { createFarm } from 'subservient';
 
 // Create a worker farm
 const farm = createFarm('worker.js', {
-    maxSize: 5, // Maximum amount of workers
+	maxSize: 1, // Maximum amount of workers
 });
 
-farm.spawn().hardTask().then((data) => {
-    console.log(`Worker returned: ${data}`);
-}).catch((err) => {
-    console.log(`Worker failed: ${err}`);
-});
+(async () => {
+    const res = await (await farm.spawn()).hardTask();
+    console.log(`Thread returned: ${res}`);
+    await farm.end();
+})();
+
 ```
 
 worker.js
 ```js
 import { expose } from 'subservient/worker';
 
-module.exports = expose({
+expose({
     hardTask() {
         return new Promise((resolve) => {
             setTimeout(() => resolve('Done!'), 3000);
@@ -76,10 +77,10 @@ Create a new worker farm.
 Arguments:
 - `file` Path to the worker module
 - `options` Self-explanatory
-    - `maxSize` Max amount of workers in a farm *(default: 10)*
-    - `idleTime` Amount of milliseconds that a worker can idle before terminating *(default: 10000)*
+    - `maxSize` Max amount of workers in a farm *(default: 3)*
+    - `idleTime` Amount of milliseconds that a worker can idle before terminating *(default: 5000)*
 
-### `WorkerFarm.spawn(): Worker`
+### `WorkerFarm.spawn(): Promise<Worker>`
 Find an idle worker. If none exists, create one.
 
 ### Running a task
