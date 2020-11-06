@@ -1,12 +1,12 @@
 {
   "name": "subservient",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The easiest way to multithread in node.js",
   "main": "./out/index.js",
   "typings": "./@types",
   "scripts": {
     "test": "jest",
-    "build": "rimraf ./out && tsc",
+    "build": "rimraf ./out ./worker && tsc && mv ./out/worker ./worker",
     "prepublish": "npm run build"
   },
   "repository": {
