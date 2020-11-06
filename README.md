@@ -19,6 +19,7 @@
 - [Install](#»-install)
 - [Basic Example](#»-basic-example)
 - [Farms](#»-farms)
+- [Pools](#»-pools)
 - [Farms vs. Pools](#»-worker-farms-vs-pools)
 
 ## » Install
@@ -39,7 +40,7 @@ import { createFarm } from 'subservient';
 
 // Create a worker farm
 const farm = createFarm('worker.js', {
-	maxSize: 1, // Maximum amount of workers
+	maxSize: 2, // Maximum amount of workers
 });
 
 (async () => {
@@ -85,6 +86,40 @@ Find an idle worker. If none exists, create one.
 
 ### Running a task
 A worker has every method exposed by its corresponding worker module. In the example, `expose` call in `worker.js` exposes a function called `hardTask`. Calling that function on the worker returns a `Promise` which resolves when the corresponding worker function returns. If the worker function returns a `Promise`, that promise is awaited before resolving.
+
+## » Pools
+When a pool is created, it will start `size` amount of parallel threads. Each time a task is sent to the pool, a free thread is chosen and the task is passed to that thread. A pool cannot dynamically create more threads.
+
+index.js
+```js
+import { createPool } from 'subservient';
+
+// Create a worker pool with 3 workers
+const pool = createPool('worker.js', 3);
+
+(async () => {
+    const res = await (await pool.spawn()).hardTask();
+    console.log(`Thread returned: ${res}`);
+    await pool.end();
+})();
+```
+
+worker.js (Same as in the first example):
+```js
+import { expose } from 'subservient/worker';
+
+expose({
+    hardTask() {
+        return new Promise((resolve) => {
+            setTimeout(() => resolve('Done!'), 3000);
+        });
+    }
+});
+```
+
+This does the same thing as in the farm example, but in a slightly different manner.
+
+The Pool API is the same as the Farm API.
 
 ## » Worker Farms vs. Pools
 Subservient provides two different types of worker groups: **Farms** and **Pools**. A Pool always has a fixed amount of workers, ready to take tasks. A Farm creates new workers as they are needed and destroys them after a fixed amount of idle time.
