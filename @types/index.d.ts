@@ -30,4 +30,4 @@ export function createPool(file: string, size: number): subservient.WorkerPool;
  * If in a worker thread, expose the functions in `endpoint` to the master thread
  * @param endpoint Functions exposed to the master thread
  */
-export function exopse(endpoint: any): void;
+export function expose(endpoint: any): void;
