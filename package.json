@@ -1,6 +1,6 @@
 {
   "name": "subservient",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "The easiest way to multithread in node.js",
   "main": "./out/index.js",
   "typings": "./@types",
@@ -14,7 +14,12 @@
     "url": "git+https://github.com/codemaster138/node-threading.git"
   },
   "keywords": [
-    "Multithreading"
+    "Multithreading",
+    "Threading",
+    "Parallelism",
+    "Async",
+    "Backend",
+    "Performance"
   ],
   "author": "Jake Sarjeant",
   "license": "GPL-3.0",
