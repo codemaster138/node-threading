@@ -1,6 +1,6 @@
 {
   "name": "subservient",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "The easiest way to multithread in node.js",
   "main": "./out/index.js",
   "typings": "./@types",
