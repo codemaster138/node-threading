@@ -1,21 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const worker_1 = require("../shared/worker");
-const log = require("debug")("subservient:pool");
-class WorkerPool {
-    constructor(file, size) {
+const log = require("debug")("subservient:farm");
+class WorkerFarm {
+    constructor(file, options) {
         this.workers = [];
         this.file = file;
-        this.size = size;
-        this.workers = [];
-        for (let i = 0; i < size; i++) {
-            this.workers.push(new worker_1.WorkerInterface(file));
-        }
+        this.options = options;
+        this.interval = setInterval(() => {
+            this.workers.forEach((w, i) => {
+                if (w.isOverDue()) {
+                    log("killing worker", w.id);
+                    w.end().then(() => {
+                        this.workers.splice(i, 1);
+                    });
+                }
+            });
+        }, 100);
     }
     awaitFreeWorker() {
         return new Promise((resolve) => {
             const h = (w) => {
                 resolve(w);
+                this.workers.forEach(worker => worker.removeListener("unlock", h));
             };
             this.workers.forEach((w) => w.once("unlock", h));
         });
@@ -23,7 +30,15 @@ class WorkerPool {
     async _spawn() {
         let worker = this.workers.find((w) => w.isIdle());
         if (!worker) {
-            worker = await this.awaitFreeWorker();
+            if (this.workers.length < this.options.maxSize) {
+                worker = new worker_1.WorkerInterface(this.file, this.options.idleTime);
+                this.workers.push(worker);
+                // Wait for the worker to become ready
+                await worker.getInterface();
+            }
+            else {
+                worker = await this.awaitFreeWorker();
+            }
         }
         return worker;
     }
@@ -45,6 +60,7 @@ class WorkerPool {
             w.removeAllListeners("unlock");
         });
         await this.endAll();
+        clearInterval(this.interval);
     }
 }
-exports.default = WorkerPool;
+exports.default = WorkerFarm;
