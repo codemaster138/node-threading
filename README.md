@@ -21,6 +21,7 @@
 - [Farms](#»-farms)
 - [Pools](#»-pools)
 - [Farms vs. Pools](#»-worker-farms-vs-pools)
+- [Notes on Performance](#»-notes-on-performance)
 
 ## » Install
 Install with npm:
@@ -121,9 +122,13 @@ This does the same thing as in the farm example, but in a slightly different man
 
 The Pool API is the same as the Farm API.
 
-## » Worker Farms vs. Pools
+## » Worker Farms vs. Pools
 Subservient provides two different types of worker groups: **Farms** and **Pools**. A Pool always has a fixed amount of workers, ready to take tasks. A Farm creates new workers as they are needed and destroys them after a fixed amount of idle time.
 
 Starting a task in a Farm takes longer because the worker must first be created, but is also more efficient than a pool because there aren't any unused workers lingering around, occupying resources.
 
 So, use what suits you best. For Example, a server that needs to serve quickly to many users should use a pool because of its smaller delay when starting tasks. On the contrary, a very resource-heavy program should use a farm to save resources when idle.
+
+## » Notes on performance
+
+Please see [PERFORMANCE.md](https://github.com/codemaster138/node-threading/blob/main/PERFORMANCE.md)
